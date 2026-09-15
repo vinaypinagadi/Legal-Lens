@@ -8,8 +8,6 @@
 
 export interface ChatInput {
   /** @minLength 1 */
-  apiKey: string;
-  /** @minLength 1 */
   question: string;
   model?: string;
 }

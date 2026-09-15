@@ -7,8 +7,6 @@
  */
 
 export interface AnalysisInput {
-  /** @minLength 1 */
-  apiKey: string;
   sourceText?: string;
   model?: string;
 }

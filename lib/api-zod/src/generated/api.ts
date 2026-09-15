@@ -105,11 +105,7 @@ export const AnalyzeDocumentParams = zod.object({
   "documentId": zod.coerce.string()
 })
 
-
-
-
 export const AnalyzeDocumentBody = zod.object({
-  "apiKey": zod.string().min(1),
   "sourceText": zod.string().optional(),
   "model": zod.string().optional()
 })
@@ -160,9 +156,7 @@ export const AskDocumentQuestionParams = zod.object({
 
 
 
-
 export const AskDocumentQuestionBody = zod.object({
-  "apiKey": zod.string().min(1),
   "question": zod.string().min(1),
   "model": zod.string().optional()
 })

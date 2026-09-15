@@ -201,14 +201,10 @@ components:
     AnalysisInput:
       type: object
       properties:
-        apiKey:
-          type: string
-          minLength: 1
         sourceText:
           type: string
         model:
           type: string
-      required: [apiKey]
     Risk:
       type: object
       properties:
@@ -240,15 +236,12 @@ components:
     ChatInput:
       type: object
       properties:
-        apiKey:
-          type: string
-          minLength: 1
         question:
           type: string
           minLength: 1
         model:
           type: string
-      required: [apiKey, question]
+      required: [question]
     Overview:
       type: object
       properties:

@@ -1,6 +1,6 @@
 import { GoogleGenAI } from "@google/genai";
 
-const DEFAULT_MODEL = "gemini-2.0-flash";
+const DEFAULT_MODEL = "gemini-3.6-flash";
 
 export type ContractAnalysis = {
   summary: string;
@@ -16,6 +16,14 @@ function getModel(model?: string): string {
   return model?.trim() || DEFAULT_MODEL;
 }
 
+function getClient(): GoogleGenAI {
+  const apiKey = process.env.GEMINI_API_KEY;
+  if (!apiKey) {
+    throw new Error("GEMINI_API_KEY is not configured.");
+  }
+  return new GoogleGenAI({ apiKey });
+}
+
 function parseJson<T>(value: string): T {
   const normalized = value
     .replace(/^```json\s*/i, "")
@@ -26,11 +34,10 @@ function parseJson<T>(value: string): T {
 }
 
 export async function analyzeContract(
-  apiKey: string,
   sourceText: string,
   model?: string,
 ): Promise<ContractAnalysis> {
-  const ai = new GoogleGenAI({ apiKey });
+  const ai = getClient();
   const response = await ai.models.generateContent({
     model: getModel(model),
     contents: `You are a careful contract explainer for non-lawyers. Do not provide legal advice. Analyze the contract below and return ONLY valid JSON with this shape:
@@ -85,12 +92,11 @@ ${sourceText}`,
 }
 
 export async function answerContractQuestion(
-  apiKey: string,
   sourceText: string,
   question: string,
   model?: string,
 ): Promise<string> {
-  const ai = new GoogleGenAI({ apiKey });
+  const ai = getClient();
   const response = await ai.models.generateContent({
     model: getModel(model),
     contents: `Answer the user's question about the contract below in plain language. Cite a relevant short excerpt when possible. If the contract does not answer the question, say that clearly. Do not provide legal advice and remind the user to consult a licensed attorney for decisions.

@@ -61,8 +61,6 @@ export interface DocumentInput {
 }
 
 export interface AnalysisInput {
-  /** @minLength 1 */
-  apiKey: string;
   sourceText?: string;
   model?: string;
 }
@@ -84,8 +82,6 @@ export interface ChatMessage {
 }
 
 export interface ChatInput {
-  /** @minLength 1 */
-  apiKey: string;
   /** @minLength 1 */
   question: string;
   model?: string;

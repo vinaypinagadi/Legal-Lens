@@ -14,10 +14,10 @@ LegalLens is a GenAI-powered legal document explainer for people who need to und
 - **API:** Express 5 in `artifacts/api-server`, mounted at `/api`.
 - **Typed contract:** `lib/api-spec/openapi.yaml` is the source of truth. Generated React Query hooks live in `lib/api-client-react`.
 - **Data:** The runnable Replit version uses the project PostgreSQL database through Drizzle ORM. The matching Supabase Auth/Postgres schema is included in `supabase/schema.sql` for a Supabase deployment.
-- **AI:** The server creates a new `GoogleGenAI` client per analysis or chat request from the user's BYOK Gemini key. The key is never written to PostgreSQL or server logs.
+- **AI:** The server creates a new `GoogleGenAI` client per analysis or chat request from the `GEMINI_API_KEY` project secret. The key is never returned to the browser, written to PostgreSQL, or logged.
 - **Document text:** The first build accepts pasted text and `.txt` uploads in the browser. PDF extraction can be added without changing the analysis contract.
 
-The dashboard and analysis workspace are usable without a key so users can inspect the product and create a document draft. Gemini analysis and document chat intentionally stop until a key is provided.
+The dashboard and analysis workspace are usable immediately. Gemini analysis and document chat use the server-managed project secret, so end users do not need to provide a key.
 
 ## Local setup
 
@@ -52,15 +52,13 @@ pnpm --filter @workspace/api-server run dev
 pnpm --filter @workspace/legallens run dev
 ```
 
-### 4. Use BYOK Gemini
+### 4. Configure Gemini
 
-1. Open Google AI Studio and create a Gemini API key.
-2. Open LegalLens Settings.
-3. Enter the key. It is kept in browser session storage for the current session only.
-4. Paste a contract or upload a `.txt` file.
-5. Run the analysis.
+1. Add `GEMINI_API_KEY` to the project secrets.
+2. Paste a contract or upload a `.txt` file.
+3. Run the analysis.
 
-The key is sent only to the LegalLens analysis endpoint for the request that needs it. It is not stored in the database, URL, or application logs. For production, prefer an encrypted server-side session or a managed secret flow rather than long-lived browser storage.
+The key stays server-side and is read only when the API creates a Gemini client. It is not sent to the browser, stored in the database, included in URLs, or written to application logs.
 
 ## API surface
 
@@ -68,14 +66,14 @@ The key is sent only to the LegalLens analysis endpoint for the request that nee
 - `GET /api/documents` — recent documents
 - `POST /api/documents` — create a draft from title and extracted text
 - `GET /api/documents/:documentId` — retrieve one document
-- `POST /api/documents/:documentId` — analyze with a BYOK Gemini key
+- `POST /api/documents/:documentId` — analyze with the server-managed Gemini connection
 - `GET /api/documents/:documentId/chat` — list document chat
 - `POST /api/documents/:documentId/chat` — ask Gemini a document-grounded question
 
 ## Assumptions
 
 - The hackathon MVP is single-user in the Replit runtime and does not require a local password system. Supabase Auth and row-level security are documented for the Supabase deployment path.
-- Contract text is persisted so an analysis can be revisited; Gemini keys are not persisted.
+- Contract text is persisted so an analysis can be revisited; the Gemini project key is managed as a secret and never persisted in application tables.
 - AI output is advisory and must be reviewed by a licensed attorney.
 - The first intake path prioritizes paste and `.txt` upload to keep the MVP lightweight and under the repository size limit.
 - The product reports potential risks, not definitive legal conclusions.

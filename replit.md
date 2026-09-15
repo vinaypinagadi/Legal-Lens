@@ -20,7 +20,7 @@ LegalLens helps non-lawyers understand contract language, spot potential risks, 
 - Validation: Zod (`zod/v4`), `drizzle-zod`
 - API codegen: Orval (from OpenAPI spec)
 - Build: esbuild (CJS bundle)
-- AI: `@google/genai` with per-request BYOK keys
+- AI: `@google/genai` with a server-managed `GEMINI_API_KEY` project secret
 
 ## Where things live
 
@@ -36,7 +36,7 @@ LegalLens helps non-lawyers understand contract language, spot potential risks, 
 ## Architecture decisions
 
 - The runnable app uses the workspace PostgreSQL/Drizzle stack; the requested Supabase schema is included as a portable deployment reference.
-- Gemini keys are held in browser session storage and sent only with analysis/chat requests; they are not persisted in the database.
+- Gemini keys are held in project secrets and used only by the API server; they are never sent to the browser or persisted in the database.
 - The API schema is OpenAPI-first so the frontend consumes generated hooks rather than handwritten request shapes.
 - Contract risks are stored as structured JSON so the UI can show severity, explanation, and source excerpts.
 
@@ -56,7 +56,7 @@ The mandatory disclaimer must remain visible: LegalLens provides AI-generated le
 ## Gotchas
 
 - After editing `lib/api-spec/openapi.yaml`, run `pnpm --filter @workspace/api-spec run codegen`.
-- Never log or persist user-provided Gemini keys.
+- Never log, return, or persist the project Gemini key.
 - Preview paths are managed by the artifact workflow; do not hardcode service ports in app code.
 
 ## Pointers

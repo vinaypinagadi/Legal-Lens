@@ -117,7 +117,6 @@ router.post("/documents/:documentId", async (req, res): Promise<void> => {
   const sourceText = body.data.sourceText?.trim() || document.sourceText;
   try {
     const analysis = await analyzeContract(
-      body.data.apiKey,
       sourceText,
       body.data.model,
     );
@@ -138,7 +137,7 @@ router.post("/documents/:documentId", async (req, res): Promise<void> => {
   } catch (error) {
     req.log.warn({ error }, "Contract analysis failed");
     res.status(400).json({
-      error: "Gemini could not analyze this document. Check your API key and try again.",
+      error: "Gemini could not analyze this document. Please try again.",
     });
   }
 });
@@ -203,7 +202,6 @@ router.post("/documents/:documentId/chat", async (req, res): Promise<void> => {
       })
       .returning();
     const answer = await answerContractQuestion(
-      body.data.apiKey,
       document.sourceText,
       body.data.question,
       body.data.model,
@@ -228,7 +226,7 @@ router.post("/documents/:documentId/chat", async (req, res): Promise<void> => {
   } catch (error) {
     req.log.warn({ error }, "Contract question failed");
     res.status(400).json({
-      error: "Gemini could not answer this question. Check your API key and try again.",
+      error: "Gemini could not answer this question. Please try again.",
     });
   }
 });
