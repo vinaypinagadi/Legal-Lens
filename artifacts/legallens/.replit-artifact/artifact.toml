@@ -1,0 +1,28 @@
+kind = "web"
+previewPath = "/"
+title = "LegalLens — AI Contract Analyzer"
+description = "A privacy-conscious contract analysis workspace that helps non-lawyers understand legal documents, review potential risks, and ask questions using their own Gemini API key."
+version = "1.0.0"
+id = "artifacts/legallens"
+router = "path"
+
+[[services]]
+name = "web"
+paths = [ "/" ]
+localPort = 24380
+
+[services.development]
+run = "pnpm --filter @workspace/legallens run dev"
+
+[services.production]
+build = [ "pnpm", "--filter", "@workspace/legallens", "run", "build" ]
+serve = "static"
+publicDir = "artifacts/legallens/dist/public"
+
+[[services.production.rewrites]]
+from = "/*"
+to = "/index.html"
+
+[services.env]
+PORT = "24380"
+BASE_PATH = "/"

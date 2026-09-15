@@ -37,6 +37,22 @@ yarn-error.log
 testem.log
 /typings
 
+# Environment and credentials
+.env
+.env.*
+!.env.example
+*.local
+
+# Large local test artifacts
+*.pdf
+*.doc
+*.docx
+*.zip
+*.tar
+*.tar.gz
+test-fixtures/
+fixtures/
+
 # System Files
 .DS_Store
 Thumbs.db

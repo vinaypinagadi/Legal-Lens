@@ -1,10 +1,11 @@
-# [Project name]
+# LegalLens — AI Contract Analyzer
 
-_Replace the heading above with the project's name, and this line with one sentence describing what this app does for users._
+LegalLens helps non-lawyers understand contract language, spot potential risks, and prepare grounded questions for a licensed attorney.
 
 ## Run & Operate
 
-- `pnpm --filter @workspace/api-server run dev` — run the API server (port 5000)
+- `pnpm --filter @workspace/api-server run dev` — run the API server
+- `pnpm --filter @workspace/legallens run dev` — run the LegalLens frontend
 - `pnpm run typecheck` — full typecheck across all packages
 - `pnpm run build` — typecheck + build all packages
 - `pnpm --filter @workspace/api-spec run codegen` — regenerate API hooks and Zod schemas from the OpenAPI spec
@@ -19,26 +20,44 @@ _Replace the heading above with the project's name, and this line with one sente
 - Validation: Zod (`zod/v4`), `drizzle-zod`
 - API codegen: Orval (from OpenAPI spec)
 - Build: esbuild (CJS bundle)
+- AI: `@google/genai` with per-request BYOK keys
 
 ## Where things live
 
-_Populate as you build — short repo map plus pointers to the source-of-truth file for DB schema, API contracts, theme files, etc._
+- `artifacts/legallens/src/App.tsx` — dashboard, intake, document analysis, risk review, chat, and privacy settings
+- `artifacts/legallens/src/index.css` — LegalLens visual tokens and paper-grid treatment
+- `artifacts/api-server/src/routes/documents.ts` — document, analysis, chat, and overview endpoints
+- `artifacts/api-server/src/lib/gemini.ts` — per-request Gemini client and prompt logic
+- `lib/api-spec/openapi.yaml` — API contract source of truth
+- `lib/db/src/schema/` — Drizzle runtime schema
+- `supabase/schema.sql` — Supabase Auth/Postgres reference schema
+- `README.md` — local setup, BYOK privacy model, and assumptions
 
 ## Architecture decisions
 
-_Populate as you build — non-obvious choices a reader couldn't infer from the code (3-5 bullets)._
+- The runnable app uses the workspace PostgreSQL/Drizzle stack; the requested Supabase schema is included as a portable deployment reference.
+- Gemini keys are held in browser session storage and sent only with analysis/chat requests; they are not persisted in the database.
+- The API schema is OpenAPI-first so the frontend consumes generated hooks rather than handwritten request shapes.
+- Contract risks are stored as structured JSON so the UI can show severity, explanation, and source excerpts.
 
 ## Product
 
-_Describe the high-level user-facing capabilities of this app once they exist._
+- Paste a contract or upload a `.txt` file.
+- Review a plain-language TL;DR summary.
+- Inspect structured red flags with severity and source excerpts.
+- Ask questions about an analyzed contract.
+- Manage a Gemini BYOK key with privacy guidance.
+- See recent documents and dashboard risk counts.
 
 ## User preferences
 
-_Populate as you build — explicit user instructions worth remembering across sessions._
+The mandatory disclaimer must remain visible: LegalLens provides AI-generated legal information, not professional legal advice. Always consult a licensed attorney.
 
 ## Gotchas
 
-_Populate as you build — sharp edges, "always run X before Y" rules._
+- After editing `lib/api-spec/openapi.yaml`, run `pnpm --filter @workspace/api-spec run codegen`.
+- Never log or persist user-provided Gemini keys.
+- Preview paths are managed by the artifact workflow; do not hardcode service ports in app code.
 
 ## Pointers
 

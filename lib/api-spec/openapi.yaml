@@ -10,6 +10,10 @@ servers:
 tags:
   - name: health
     description: Health operations
+  - name: documents
+    description: Contract documents and AI analysis
+  - name: chat
+    description: Questions about analyzed contracts
 paths:
   /healthz:
     get:
@@ -24,7 +28,129 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/HealthStatus"
+  /documents:
+    get:
+      operationId: listDocuments
+      tags: [documents]
+      summary: List contract documents
+      responses:
+        "200":
+          description: Contract documents
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Document"
+    post:
+      operationId: createDocument
+      tags: [documents]
+      summary: Create a contract document
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/DocumentInput"
+      responses:
+        "201":
+          description: Created document
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Document"
+  /documents/{documentId}:
+    get:
+      operationId: getDocument
+      tags: [documents]
+      summary: Get a contract document
+      parameters:
+        - $ref: "#/components/parameters/DocumentId"
+      responses:
+        "200":
+          description: Contract document
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Document"
+        "404":
+          description: Document not found
+    post:
+      operationId: analyzeDocument
+      tags: [documents]
+      summary: Analyze a contract with a user-provided Gemini key
+      parameters:
+        - $ref: "#/components/parameters/DocumentId"
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/AnalysisInput"
+      responses:
+        "200":
+          description: Updated analysis
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Document"
+        "400":
+          description: Invalid analysis request
+  /documents/{documentId}/chat:
+    get:
+      operationId: listChatMessages
+      tags: [chat]
+      summary: List questions and answers for a document
+      parameters:
+        - $ref: "#/components/parameters/DocumentId"
+      responses:
+        "200":
+          description: Chat messages
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/ChatMessage"
+    post:
+      operationId: askDocumentQuestion
+      tags: [chat]
+      summary: Ask a question about a contract
+      parameters:
+        - $ref: "#/components/parameters/DocumentId"
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/ChatInput"
+      responses:
+        "201":
+          description: Answered question
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ChatMessage"
+  /overview:
+    get:
+      operationId: getOverview
+      tags: [documents]
+      summary: Get dashboard overview
+      responses:
+        "200":
+          description: Overview metrics
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Overview"
 components:
+  parameters:
+    DocumentId:
+      name: documentId
+      in: path
+      required: true
+      schema:
+        type: string
   schemas:
     HealthStatus:
       type: object
@@ -33,4 +159,106 @@ components:
           type: string
       required:
         - status
+    Document:
+      type: object
+      properties:
+        id:
+          type: string
+        title:
+          type: string
+        fileName:
+          type: ["string", "null"]
+        status:
+          type: string
+          enum: [ready, analyzing, draft]
+        sourceText:
+          type: string
+        summary:
+          type: ["string", "null"]
+        risks:
+          type: array
+          items:
+            $ref: "#/components/schemas/Risk"
+        riskCount:
+          type: integer
+        analyzedAt:
+          type: ["string", "null"]
+        createdAt:
+          type: string
+      required: [id, title, fileName, status, sourceText, summary, risks, riskCount, analyzedAt, createdAt]
+    DocumentInput:
+      type: object
+      properties:
+        title:
+          type: string
+          minLength: 1
+        fileName:
+          type: ["string", "null"]
+        sourceText:
+          type: string
+          minLength: 1
+      required: [title, sourceText]
+    AnalysisInput:
+      type: object
+      properties:
+        apiKey:
+          type: string
+          minLength: 1
+        sourceText:
+          type: string
+        model:
+          type: string
+      required: [apiKey]
+    Risk:
+      type: object
+      properties:
+        severity:
+          type: string
+          enum: [high, medium, low]
+        title:
+          type: string
+        explanation:
+          type: string
+        excerpt:
+          type: ["string", "null"]
+      required: [severity, title, explanation, excerpt]
+    ChatMessage:
+      type: object
+      properties:
+        id:
+          type: string
+        documentId:
+          type: string
+        role:
+          type: string
+          enum: [user, assistant]
+        content:
+          type: string
+        createdAt:
+          type: string
+      required: [id, documentId, role, content, createdAt]
+    ChatInput:
+      type: object
+      properties:
+        apiKey:
+          type: string
+          minLength: 1
+        question:
+          type: string
+          minLength: 1
+        model:
+          type: string
+      required: [apiKey, question]
+    Overview:
+      type: object
+      properties:
+        documentCount:
+          type: integer
+        analyzedCount:
+          type: integer
+        openRiskCount:
+          type: integer
+        lastAnalyzedAt:
+          type: ["string", "null"]
+      required: [documentCount, analyzedCount, openRiskCount, lastAnalyzedAt]
 

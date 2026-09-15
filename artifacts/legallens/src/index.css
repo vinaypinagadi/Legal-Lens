@@ -1,0 +1,97 @@
+@import url('https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=DM+Sans:wght@400;500;600;700&family=Newsreader:opsz,wght@6..72,500;6..72,600&display=swap');
+@import 'tailwindcss';
+@import 'tw-animate-css';
+
+@custom-variant dark (&:is(.dark *));
+
+@theme inline {
+  --color-background: hsl(var(--background));
+  --color-foreground: hsl(var(--foreground));
+  --color-border: hsl(var(--border));
+  --color-input: hsl(var(--input));
+  --color-ring: hsl(var(--ring));
+  --color-card: hsl(var(--card));
+  --color-card-foreground: hsl(var(--card-foreground));
+  --color-primary: hsl(var(--primary));
+  --color-primary-foreground: hsl(var(--primary-foreground));
+  --color-secondary: hsl(var(--secondary));
+  --color-secondary-foreground: hsl(var(--secondary-foreground));
+  --color-muted: hsl(var(--muted));
+  --color-muted-foreground: hsl(var(--muted-foreground));
+  --color-accent: hsl(var(--accent));
+  --color-accent-foreground: hsl(var(--accent-foreground));
+  --color-destructive: hsl(var(--destructive));
+  --color-destructive-foreground: hsl(var(--destructive-foreground));
+  --font-sans: var(--app-font-sans);
+  --font-serif: var(--app-font-serif);
+  --font-mono: var(--app-font-mono);
+  --radius-sm: calc(var(--radius) - 4px);
+  --radius-md: calc(var(--radius) - 2px);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) + 4px);
+}
+
+:root {
+  --background: 42 35% 94%;
+  --foreground: 216 27% 19%;
+  --border: 40 17% 83%;
+  --input: 40 17% 83%;
+  --ring: 173 30% 38%;
+  --card: 42 40% 97%;
+  --card-foreground: 216 27% 19%;
+  --primary: 173 30% 32%;
+  --primary-foreground: 42 40% 97%;
+  --secondary: 38 27% 88%;
+  --secondary-foreground: 216 27% 24%;
+  --muted: 40 20% 90%;
+  --muted-foreground: 215 12% 44%;
+  --accent: 36 70% 63%;
+  --accent-foreground: 216 27% 19%;
+  --destructive: 5 59% 49%;
+  --destructive-foreground: 42 40% 97%;
+  --radius: 0.75rem;
+  --app-font-sans: 'DM Sans', sans-serif;
+  --app-font-serif: 'Newsreader', Georgia, serif;
+  --app-font-mono: 'DM Mono', monospace;
+}
+
+.dark {
+  --background: 216 26% 13%;
+  --foreground: 42 30% 92%;
+  --border: 216 18% 25%;
+  --input: 216 18% 25%;
+  --ring: 173 35% 56%;
+  --card: 216 24% 16%;
+  --card-foreground: 42 30% 92%;
+  --primary: 173 35% 56%;
+  --primary-foreground: 216 26% 13%;
+  --secondary: 216 18% 23%;
+  --secondary-foreground: 42 30% 92%;
+  --muted: 216 18% 21%;
+  --muted-foreground: 216 10% 67%;
+  --accent: 36 63% 61%;
+  --accent-foreground: 216 26% 13%;
+  --destructive: 5 63% 63%;
+  --destructive-foreground: 216 26% 13%;
+}
+
+@layer base {
+  * { @apply border-border; }
+  html { background: hsl(var(--background)); }
+  body { @apply font-sans antialiased text-foreground; margin: 0; }
+  button, a, input, textarea { -webkit-tap-highlight-color: transparent; }
+  :focus-visible { outline: 2px solid hsl(var(--ring)); outline-offset: 3px; }
+}
+
+@keyframes rise { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: translateY(0); } }
+@keyframes pulse-soft { 0%,100% { opacity: .48; } 50% { opacity: 1; } }
+.animate-rise { animation: rise .45s ease-out both; }
+.animate-pulse-soft { animation: pulse-soft 1.8s ease-in-out infinite; }
+.paper-grid {
+  background-image: linear-gradient(hsl(var(--border) / .28) 1px, transparent 1px), linear-gradient(90deg, hsl(var(--border) / .18) 1px, transparent 1px);
+  background-size: 28px 28px;
+}
+.ink-rule { position: relative; }
+.ink-rule::after { content: ''; position: absolute; left: 0; right: 0; bottom: -10px; height: 1px; background: hsl(var(--primary) / .22); }
+.prose-legal p { margin: 0 0 1.05rem; line-height: 1.85; }
+.prose-legal mark { background: hsl(var(--accent) / .38); color: inherit; padding: .08em .16em; border-radius: .18em; }
