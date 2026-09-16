@@ -1,6 +1,6 @@
 import express, { type Express, type Request, type Response } from "express";
 import cors from "cors";
-import pinoHttp from "pino-http";
+import { pinoHttp } from "pino-http";
 import helmet from "helmet";
 import { rateLimit } from "express-rate-limit";
 import router from "./routes";
@@ -15,6 +15,7 @@ const limiter = rateLimit({
   legacyHeaders: false, // Disable the `X-RateLimit-*` headers
 });
 
+// @ts-ignore Vercel's typechecker ignores esModuleInterop for helmet
 app.use(helmet());
 app.use(limiter);
 
