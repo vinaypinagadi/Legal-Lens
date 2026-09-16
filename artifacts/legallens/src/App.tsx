@@ -32,7 +32,7 @@ function Button({ children, className, variant = 'primary', ...props }: ButtonHT
     variant === 'outline' && 'border border-border bg-card/70 text-foreground hover:border-primary/50 hover:bg-secondary',
     variant === 'quiet' && 'text-muted-foreground hover:bg-secondary hover:text-foreground',
     className,
-  )} />;
+  )}>{children}</button>;
 }
 
 function Shell({ children }: { children: ReactNode }) {
@@ -196,7 +196,7 @@ function Workspace() {
   const ask = useAskDocumentQuestion();
   const [question, setQuestion] = useState('');
   const [activeTab, setActiveTab] = useState<'summary' | 'risks' | 'chat'>('summary');
-  const [model, setModel] = useState('gemini-3.6-flash');
+  const [model] = useState('gemini-3.6-flash');
   const messages = chat.data ?? [];
   const document = doc.data;
   const promptSuggestions = ['What can end this agreement?', 'Where could costs change?', 'What should I ask a lawyer?'];

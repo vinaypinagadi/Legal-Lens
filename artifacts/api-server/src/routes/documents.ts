@@ -1,5 +1,5 @@
 import { Router, type IRouter } from "express";
-import { and, desc, eq, sql } from "drizzle-orm";
+import { desc, eq, sql } from "drizzle-orm";
 import { db, chatHistoryTable, documentsTable } from "@workspace/db";
 import {
   AnalyzeDocumentBody,
