@@ -5,7 +5,8 @@
     "tsBuildInfoFile": ".tsbuildinfo",
     "outDir": "dist",
     "rootDir": "src",
-    "types": ["node", "vitest/globals", "vitest"]
+    "types": ["node", "vitest/globals", "vitest"],
+    "esModuleInterop": true
   },
   "include": ["src"],
   "references": [
