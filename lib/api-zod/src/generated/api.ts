@@ -99,7 +99,7 @@ export const GetDocumentResponse = zod.object({
 
 
 /**
- * @summary Analyze a contract with a user-provided Gemini key
+ * @summary Analyze a contract with the server-managed Gemini connection
  */
 export const AnalyzeDocumentParams = zod.object({
   "documentId": zod.coerce.string()

@@ -385,7 +385,7 @@ export const getAnalyzeDocumentUrl = (documentId: string,) => {
 }
 
 /**
- * @summary Analyze a contract with a user-provided Gemini key
+ * @summary Analyze a contract with the server-managed Gemini connection
  */
 export const analyzeDocument = async (documentId: string,
     analysisInput: AnalysisInput, options?: Parameters<typeof customFetch>[1]): Promise<Document> => {
@@ -452,7 +452,7 @@ const {mutation: mutationOptions, request: requestOptions} = options ?
     export type AnalyzeDocumentMutationVariables = {documentId: string;data: BodyType<AnalysisInput>}
 
     /**
- * @summary Analyze a contract with a user-provided Gemini key
+ * @summary Analyze a contract with the server-managed Gemini connection
  */
 export const useAnalyzeDocument = <TError = ErrorType<void>,
     TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof analyzeDocument>>, TError,AnalyzeDocumentMutationVariables, TContext>, request?: SecondParameter<typeof customFetch>}

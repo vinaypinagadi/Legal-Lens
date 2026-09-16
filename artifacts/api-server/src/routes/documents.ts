@@ -246,7 +246,9 @@ router.get("/overview", async (_req, res): Promise<void> => {
       documentCount: documentStats.documentCount,
       analyzedCount: documentStats.analyzedCount,
       openRiskCount: documentStats.openRiskCount,
-      lastAnalyzedAt: documentStats.lastAnalyzedAt?.toISOString() ?? null,
+      lastAnalyzedAt: documentStats.lastAnalyzedAt
+        ? new Date(documentStats.lastAnalyzedAt).toISOString()
+        : null,
     }),
   );
 });

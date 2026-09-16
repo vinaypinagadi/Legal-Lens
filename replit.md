@@ -31,7 +31,7 @@ LegalLens helps non-lawyers understand contract language, spot potential risks, 
 - `lib/api-spec/openapi.yaml` — API contract source of truth
 - `lib/db/src/schema/` — Drizzle runtime schema
 - `supabase/schema.sql` — Supabase Auth/Postgres reference schema
-- `README.md` — local setup, BYOK privacy model, and assumptions
+- `README.md` — local setup, server-managed AI privacy model, and assumptions
 
 ## Architecture decisions
 
@@ -46,7 +46,7 @@ LegalLens helps non-lawyers understand contract language, spot potential risks, 
 - Review a plain-language TL;DR summary.
 - Inspect structured red flags with severity and source excerpts.
 - Ask questions about an analyzed contract.
-- Manage a Gemini BYOK key with privacy guidance.
+- Review the server-managed AI connection and privacy guidance.
 - See recent documents and dashboard risk counts.
 
 ## User preferences

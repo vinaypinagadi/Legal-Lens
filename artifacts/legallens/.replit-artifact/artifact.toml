@@ -1,7 +1,7 @@
 kind = "web"
 previewPath = "/"
 title = "LegalLens — AI Contract Analyzer"
-description = "A privacy-conscious contract analysis workspace that helps non-lawyers understand legal documents, review potential risks, and ask questions using their own Gemini API key."
+description = "A privacy-conscious contract analysis workspace that helps non-lawyers understand legal documents, review potential risks, and ask questions using a secure server-managed Gemini connection."
 version = "1.0.0"
 id = "artifacts/legallens"
 router = "path"

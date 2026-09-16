@@ -1,0 +1,1 @@
+- [Gemini project-secret compatibility](gemini-project-secret.md) — keep credentials server-side and follow the account’s current supported model name.

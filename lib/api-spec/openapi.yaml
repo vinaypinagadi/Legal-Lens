@@ -78,7 +78,7 @@ paths:
     post:
       operationId: analyzeDocument
       tags: [documents]
-      summary: Analyze a contract with a user-provided Gemini key
+      summary: Analyze a contract with the server-managed Gemini connection
       parameters:
         - $ref: "#/components/parameters/DocumentId"
       requestBody:
