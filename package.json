@@ -10,9 +10,6 @@
     "test": "pnpm -r --if-present run test"
   },
   "private": true,
-  "dependencies": {
-    "@replit/connectors-sdk": "^0.4.3"
-  },
   "devDependencies": {
     "@eslint/js": "^9.0.0",
     "@supabase/ssr": "^0.12.7",
